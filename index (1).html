@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sneha, Epic Cricket Date? 🏏😂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --vh: 1vh; }
+        * { box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 30%, #3b82f6 70%, #06b6d4 100%);
+            font-family: system-ui, -apple-system, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 1rem;
+            min-height: 100vh;
+            height: 100dvh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .hero-text { font-family: 'Dancing Script', cursive; font-weight: 700; }
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        .cricket-emoji { font-size: clamp(2rem, 8vw, 4rem); animation: bounce 2s infinite; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .floating { position: absolute; pointer-events: none; animation: float 8s linear infinite; }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+        .no-btn { 
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            position: relative;
+            z-index: 10;
+        }
+        .no-btn:hover, .no-btn:active { 
+            transform: translate(50px, -50px) rotate(20deg) scale(1.15) !important; 
+        }
+        input, select, textarea { 
+            background: rgba(255,255,255,0.15) !important; 
+            border: 2px solid rgba(255,255,255,0.3) !important; 
+            backdrop-filter: blur(10px); 
+        }
+        input:focus, select:focus, textarea:focus { 
+            border-color: #10b981 !important; 
+            box-shadow: 0 0 20px rgba(16,185,129,0.5); 
+        }
+        @media (max-width: 480px) { 
+            body { padding: 0.75rem; font-size: 1.05rem; } 
+        }
+        .shake { animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-center items-center text-center relative">
+    <!-- Floating cricket emojis -->
+    <div id="floaters"></div>
+
+    <!-- Hero cricket GIF -->
+    <div class="mb-8 relative z-10">
+        <img id="heroGif" src="https://media.giphy.com/media/l0MYCYEPsutMPnhDS/giphy.gif" alt="Virat Smash! 🔥" class="w-full max-w-[300px] aspect-square rounded-3xl shadow-2xl border-8 border-blue-400/50 mx-auto">
+        <div class="cricket-emoji absolute -top-4 -right-4">🏏</div>
+        <div class="cricket-emoji absolute -bottom-4 -left-4">🏆</div>
+    </div>
+
+    <!-- Initial Proposal -->
+    <div id="proposal" class="max-w-md">
+        <h1 class="hero-text text-4xl md:text-6xl mb-6 drop-shadow-2xl leading-tight">Snehaaa! 😍🏏</h1>
+        <div id="mainText" class="text-2xl md:text-3xl mb-8 drop-shadow-xl font-bold px-6">
+            IND vs NZ <span class="text-yellow-300">FINAL</span><br>
+            Watch live with me?<br><span class="text-green-300">Treat + Ur FAV food! 🍔🔥</span>
+        </div>
+        <p id="subText" class="text-lg md:text-xl mb-10 opacity-90">7 PM Narendra Modi Stadium! 🇮🇳</p>
+        
+        <div class="flex flex-col sm:flex-row gap-6">
+            <button id="yesBtn" class="bg-gradient-to-r from-emerald-400 to-green-500 hover:from-emerald-500 hover:to-green-600 text-xl font-black py-5 px-10 rounded-3xl shadow-2xl transform hover:scale-110 active:scale-105 transition-all duration-300 text-white min-h-[4rem]">YESSS 🏆😍</button>
+            <button id="noBtn" class="bg-gradient-to-r from-orange-400 to-red-500 hover:from-orange-500 hover:to-red-600 text-xl font-black py-5 px-10 rounded-3xl shadow-2xl no-btn text-white min-h-[4rem]">Nahh 😴💤</button>
+        </div>
+    </div>
+
+    <!-- Order Form -->
+    <form id="orderForm" class="max-w-md hidden z-20 space-y-6">
+        <h2 class="hero-text text-3xl md:text-4xl drop-shadow-2xl">Yay Sneha! 🎉🏏</h2>
+        <p class="text-xl drop-shadow-lg">Final dekhne chale! Ab batao:</p>
+        
+        <div>
+            <label class="block text-lg mb-2 font-semibold flex items-center gap-2"><span class="text-2xl">🍔</span> Fav Food?</label>
+            <input type="text" id="food" placeholder="Paneer tikka? Biryani? 😋" class="w-full p-4 rounded-2xl text-xl font-semibold" required>
+        </div>
+        
+        <div>
+            <label class="block text-lg mb-2 font-semibold flex items-center gap-2"><span class="text-2xl">🥤</span> Drink?</label>
+            <select id="drink" class="w-full p-4 rounded-2xl text-xl font-semibold" required>
+                <option value="">Thanda cola? Lassi? Mocktail? 😂</option>
+                <option>Cola</option>
+                <option>Thums Up</option>
+                <option>Lassi</option>
+                <option>Mocktail</option>
+                <option>Other 🔥</option>
+            </select>
+        </div>
+        
+        <div>
+            <label class="block text-lg mb-2 font-semibold flex items-center gap-2"><span class="text-2xl">🥨</span> Snacks?</label>
+            <input type="text" id="snacks" placeholder="Samosa? Popcorn? Chips? 🤤" class="w-full p-4 rounded-2xl text-xl font-semibold" required>
+        </div>
+        
+        <div>
+            <label class="block text-lg mb-2 font-semibold flex items-center gap-2"><span class="text-2xl">💫</span> Special req?</label>
+            <textarea id="special" rows="2" placeholder="Extra spicy? No onion? AC seat? 😜" class="w-full p-4 rounded-2xl text-xl font-semibold resize-none"></textarea>
+        </div>
+        
+        <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-2xl font-black py-6 px-8 rounded-3xl shadow-2xl transform hover:scale-105 active:scale-100 transition-all duration-300 text-white min-h-[4rem]">🚀 SEND ORDER TO ME! Confirm 🏏</button>
+    </form>
+
+    <!-- Success -->
+    <div id="success" class="max-w-md hidden text-center">
+        <div class="text-6xl mb-6">✅🏆</div>
+        <h2 class="text-3xl md:text-4xl drop-shadow-2xl mb-4">ORDER SENT! 🎉</h2>
+        <p class="text-xl mb-8">Sneha's details on my WhatsApp! Picking you up soon 🚗🇮🇳</p>
+        <div class="space-y-3">
+            <p class="text-lg opacity-90 bg-white/20 p-4 rounded-2xl">WhatsApp opened automatically! 📱</p>
+            <a href="#" id="whatsappLink" class="block bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-3xl text-xl shadow-xl no-underline">View Chat 🗨️</a>
+        </div>
+    </div>
+
+    <script>
+        // Fix mobile viewport
+        let vh = 0;
+        const setVh = () => {
+            vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+        setVh(); window.addEventListener('resize', setVh);
+        window.addEventListener('orientationchange', () => setTimeout(setVh, 100));
+
+        // WhatsApp number
+        const WA_PHONE = '8278663966';
+
+        // 6 Stages of NO 😂
+        const noStages = [
+            { text: 'India haar jayega without you? 😱', gif: 'https://media.giphy.com/media/26ufm9ibz3NEj5fs0/giphy.gif' },
+            { text: '6️⃣ runs chahiye last over? No tension with you! 🏏', gif: 'https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif' },
+            { text: 'Virat out on 99? You can save him! 🦁', gif: 'https://media.giphy.com/media/l0MYCYEPsutMPnhDS/giphy.gif' },
+            { text: 'Treat miss karogi? Biryani + cola FREE! 🍔🥤', gif: 'https://media.giphy.com/media/Ju7l5yW2YKxnsbxStB/giphy.gif' },
+            { text: 'Final without Sneha? Impossible! 😤🇮🇳', gif: 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif' },
+            { text: 'ONLY YES LEFT! 🏆😍', hideNo: true }
+        ];
+        let noClickCount = 0;
+
+        // Floating emojis
+        const emojis = ['🏏','🏆','🇮🇳','🔥','😍','😂','🍔','🥤'];
+        function createFloater() {
+            const div = document.createElement('div');
+            div.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+            div.className = 'floating text-3xl';
+            div.style.left = Math.random() * 100 + '%';
+            div.style.animationDuration = (Math.random() * 4 + 5) + 's';
+            document.getElementById('floaters').appendChild(div);
+            setTimeout(() => div.remove(), 9000);
+        }
+        setInterval(createFloater, 800);
+
+        // EPIC No button - 6 stages!
+        document.getElementById('noBtn').addEventListener('click', () => {
+            noClickCount++;
+            if (noClickCount <= 6) {
+                const stage = noStages[noClickCount - 1];
+                document.getElementById('noBtn').innerHTML = stage.text;
+                document.getElementById('heroGif').src = stage.gif;
+                document.getElementById('mainText').innerHTML = 'Ab kya soch rahi ho Sneha? 🤔😂';
+                
+                // Shake animation
+                document.getElementById('noBtn').classList.add('shake');
+                setTimeout(() => document.getElementById('noBtn').classList.remove('shake'), 500);
+                
+                // Final stage - hide No!
+                if (stage.hideNo) {
+                    setTimeout(() => {
+                        document.getElementById('noBtn').style.display = 'none';
+                        confetti({ particleCount: 80, spread: 60 });
+                        document.getElementById('mainText').innerHTML = 'YES mat dawalna Sneha! 🏏😍';
+                    }, 1500);
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('noBtn').innerHTML = 'Nahh 😴💤';
+                    }, 3000);
+                }
+            }
+        });
+
+        // Dodge on hover
+        document.getElementById('noBtn').addEventListener('pointermove', e => {
+            if (noClickCount < 6) {
+                const rect = e.target.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width * 50;
+                const y = (e.clientY - rect.top) / rect.height * -50;
+                e.target.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        });
+
+        // Yes button
+        document.getElementById('yesBtn').onclick = () => {
+            document.getElementById('proposal').classList.add('hidden');
+            document.getElementById('orderForm').classList.remove('hidden');
+            confetti({ particleCount: 150, spread: 90, origin: {y: 0.5} });
+        };
+
+        // Form submit to WhatsApp
+        document.getElementById('orderForm').onsubmit = e => {
+            e.preventDefault();
+            const food = document.getElementById('food').value;
+            const drink = document.getElementById('drink').value;
+            const snacks = document.getElementById('snacks').value;
+            const special = document.getElementById('special').value || 'None 😎';
+
+            const message = `🏏 *Sneha CONFIRMED for IND vs NZ FINAL!* 🏆
+` +
+                `No clicks: ${noClickCount} 😂 | YES finally! 🎉
+
+` +
+                `🍔 *Fav Food:* ${food}
+` +
+                `🥤 *Drink:* ${drink}
+` +
+                `🥨 *Snacks:* ${snacks}
+` +
+                `💫 *Special:* ${special}
+
+` +
+                `*PICKUP:* 6:30 PM 🚗 | Stadium 7 PM 🇮🇳
+` +
+                `#SnehaDate #IndiaKiJeet 🔥`;
+
+            const encodedMsg = encodeURIComponent(message);
+            const waUrl = `https://wa.me/91${WA_PHONE}?text=${encodedMsg}`;
+            
+            document.getElementById('orderForm').classList.add('hidden');
+            document.getElementById('success').classList.remove('hidden');
+            document.getElementById('whatsappLink').href = waUrl;
+            
+            // Victory confetti
+            for(let i=0; i<10; i++) {
+                setTimeout(() => confetti({
+                    particleCount: 100,
+                    angle: 60 + i*3,
+                    spread: 55,
+                    origin: { x: i/10 }
+                }), i*150);
+            }
+            
+            window.open(waUrl, '_blank');
+        };
+    </script>
+</body>
+</html>
